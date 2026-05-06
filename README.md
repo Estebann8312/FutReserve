@@ -2,67 +2,28 @@
 
 Plataforma FullStack para el alquiler y gestión de canchas sintéticas.
 
+## ¿Qué es FutReserve?
+
+FutReserve es un sistema integral diseñado para facilitar la reserva y administración de canchas de fútbol sintéticas. Permite a los usuarios registrarse, iniciar sesión de forma segura y visualizar un catálogo de canchas disponibles, además de gestionar reservas de manera rápida y eficiente a través de un panel de control (Dashboard).
+
 ## Tecnologías Utilizadas
 
-*   **Backend:** Spring Boot 3, Spring Security, JWT, Java 17, Maven.
-*   **Base de Datos:** MongoDB Atlas (NoSQL en la nube).
-*   **Frontend:** React, Vite, Axios, React Router.
-*   **Diseño:** CSS global (Tema oscuro con detalles verde neón).
+El proyecto fue construido utilizando un enfoque FullStack moderno, dividiendo las responsabilidades entre el frontend y el backend:
 
-## Estructura del Proyecto
+*   **Backend (API REST):** Desarrollado con Spring Boot 3 y Java 17. Utiliza Spring Security y JSON Web Tokens (JWT) para la autenticación y autorización segura. El manejo de dependencias se realiza mediante Maven.
+*   **Base de Datos:** MongoDB Atlas. Una base de datos NoSQL alojada en la nube que ofrece alta disponibilidad y flexibilidad para los datos de usuarios, canchas y reservas.
+*   **Frontend (Interfaz de Usuario):** Construido con React y Vite para un rendimiento ultrarrápido. Utiliza React Router para la navegación entre páginas y Axios para consumir la API REST del backend.
+*   **Diseño y UI:** Se empleó CSS global con un diseño centrado en la usabilidad, presentando un tema oscuro moderno con detalles y contrastes en verde neón para una estética deportiva premium.
 
-El proyecto está dividido en dos carpetas principales en la raíz:
+## ¿Cómo funciona?
 
-*   `/backend`: Contiene la API REST desarrollada en Spring Boot.
-*   `/frontend`: Contiene la aplicación web desarrollada con Vite + React.
+La arquitectura del sistema está basada en una separación de capas clara:
 
-## Cómo ejecutar el proyecto localmente
-
-### 1. Ejecutar el Backend (Spring Boot)
-
-Asegúrate de tener instalado Java 17+ y Maven.
-La conexión a MongoDB Atlas ya está configurada en `backend/src/main/resources/application.properties`.
-
-1.  Abre una terminal.
-2.  Navega a la carpeta del backend:
-    ```bash
-    cd backend
-    ```
-3.  Ejecuta la aplicación usando Maven:
-    ```bash
-    mvn spring-boot:run
-    ```
-    El servidor backend se iniciará en `http://localhost:8080`.
-
-### 2. Ejecutar el Frontend (Vite + React)
-
-Asegúrate de tener instalado Node.js (v18 o superior).
-
-1.  Abre **otra** terminal nueva.
-2.  Navega a la carpeta del frontend:
-    ```bash
-    cd frontend
-    ```
-3.  Instala las dependencias (si no lo has hecho ya):
-    ```bash
-    npm install
-    ```
-4.  Inicia el servidor de desarrollo:
-    ```bash
-    npm run dev
-    ```
-    El frontend estará disponible en `http://localhost:5173`.
-
-### 3. Evitar subir archivos temporales o compilados
-Asegúrense de no modificar ni borrar los archivos `.gitignore`. Estos previenen que se suban a GitHub archivos basura generados por sus computadoras o IDEs (como las carpetas `target/`, `node_modules/` o configuraciones de VS Code / IntelliJ).
-
-## Funcionalidades Implementadas
-
-*   **Autenticación:** Registro e inicio de sesión de usuarios usando JWT.
-*   **Protección de Rutas:** El frontend utiliza Private Routes para asegurar que solo usuarios logueados accedan al dashboard y a la gestión de canchas.
-*   **CRUD de Canchas:** Crear, listar, actualizar y eliminar canchas sintéticas (exclusivo para usuarios autenticados).
-
-## Arquitectura
+1.  **Interacción del Usuario:** El cliente interactúa con la interfaz web desarrollada en React.
+2.  **Autenticación:** Al iniciar sesión o registrarse, el frontend envía las credenciales al backend, el cual las valida y genera un token JWT firmado.
+3.  **Autorización y Peticiones:** El frontend almacena este token JWT de forma segura y lo incluye en la cabecera `Authorization` de todas las peticiones subsecuentes a rutas protegidas (como crear una reserva o ver el dashboard).
+4.  **Lógica de Negocio (Backend):** El servidor Spring Boot recibe las peticiones, intercepta los tokens mediante filtros de seguridad, valida que el usuario tenga los permisos necesarios y procesa la lógica de reservas, consulta de canchas y gestión de usuarios.
+5.  **Persistencia de Datos:** Todos los datos y transacciones se guardan asíncronamente en MongoDB Atlas a través de repositorios de Spring Data.
 
 ```mermaid
 graph TD
@@ -71,7 +32,7 @@ graph TD
     
     subgraph Frontend
     A1[Login / Registro] --> A2[Contexto JWT]
-    A2 --> A3[Dashboard / CRUD Canchas]
+    A2 --> A3[Dashboard / CRUD Canchas / Reservas]
     end
     
     subgraph Backend
@@ -81,6 +42,10 @@ graph TD
     end
 ```
 
----
+## Funcionalidades Principales
 
-
+*   **Autenticación Segura:** Registro e inicio de sesión de usuarios usando JWT.
+*   **Gestión de Canchas:** Crear, leer, actualizar y eliminar (CRUD) información de las canchas disponibles.
+*   **Sistema de Reservas:** Los usuarios pueden reservar canchas en fechas específicas y revisar su historial.
+*   **Dashboard Interactivo:** Un panel central de control que proporciona acceso rápido a las funciones clave de la plataforma.
+*   **Protección de Rutas:** El frontend protege activamente las vistas privadas para asegurar que solo usuarios verificados accedan a la gestión.
