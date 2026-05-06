@@ -50,3 +50,11 @@ graph TD
 2. **Token:** El backend valida credenciales y emite un token **JWT**.
 3. **Peticiones:** El frontend incluye el JWT para acceder a zonas protegidas.
 4. **Persistencia:** La información se sincroniza en **MongoDB Atlas**.
+
+---
+
+## 👥 Integrantes del Equipo
+
+*   👨‍💻 **David Esteban Suarez Lozano**
+*   👨‍💻 **Thomas Alejandro Perez Rojas**
+*   👨‍💻 **Jesus David Santodomingo Carrascal**
