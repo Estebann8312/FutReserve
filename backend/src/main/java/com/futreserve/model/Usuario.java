@@ -25,5 +25,7 @@ public class Usuario {
 
     private String password;
 
+    private Role role = Role.USER;
+
     private LocalDateTime createdAt = LocalDateTime.now();
 }

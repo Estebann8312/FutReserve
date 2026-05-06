@@ -9,6 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import com.futreserve.repository.UsuarioRepository;
+import com.futreserve.model.Usuario;
+import com.futreserve.model.Role;
+
 import java.util.List;
 
 @RestController
@@ -17,9 +23,17 @@ import java.util.List;
 public class CanchaController {
 
     private final CanchaService canchaService;
+    private final UsuarioRepository usuarioRepository;
 
     @GetMapping
     public ResponseEntity<List<Cancha>> getAll() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getName() != null) {
+            Usuario user = usuarioRepository.findByEmail(auth.getName()).orElse(null);
+            if (user != null && user.getRole() == Role.OWNER) {
+                return ResponseEntity.ok(canchaService.getByOwnerId(user.getId()));
+            }
+        }
         return ResponseEntity.ok(canchaService.getAll());
     }
 
@@ -35,6 +49,13 @@ public class CanchaController {
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody CanchaRequest request) {
         try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null && auth.getName() != null) {
+                Usuario user = usuarioRepository.findByEmail(auth.getName()).orElse(null);
+                if (user != null && user.getRole() == Role.OWNER) {
+                    request.setOwnerId(user.getId());
+                }
+            }
             return ResponseEntity.status(HttpStatus.CREATED).body(canchaService.create(request));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

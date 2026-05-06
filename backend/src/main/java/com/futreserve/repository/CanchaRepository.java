@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface CanchaRepository extends MongoRepository<Cancha, String> {
     List<Cancha> findByDisponibleTrue();
+    List<Cancha> findByOwnerId(String ownerId);
 }

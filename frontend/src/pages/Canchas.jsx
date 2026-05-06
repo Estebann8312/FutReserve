@@ -1,12 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import api from '../api/axios';
+import { AuthContext } from '../context/AuthContext';
 
 const Canchas = () => {
+  const { user } = useContext(AuthContext);
   const [canchas, setCanchas] = useState([]);
+  const [owners, setOwners] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentCancha, setCurrentCancha] = useState({
-    nombre: '', descripcion: '', precioHora: '', capacidad: '', ubicacion: '', disponible: true
+    nombre: '', numeroCancha: '', descripcion: '', precioHora: '', duracion: 1, capacidad: '', ubicacion: '', disponible: true, ownerId: ''
   });
 
   const fetchCanchas = async () => {
@@ -20,8 +23,18 @@ const Canchas = () => {
     }
   };
 
+  const fetchOwners = async () => {
+    try {
+      const res = await api.get('/usuarios/owners');
+      setOwners(res.data);
+    } catch (error) {
+      console.error('Error fetching owners', error);
+    }
+  };
+
   useEffect(() => {
     fetchCanchas();
+    fetchOwners();
   }, []);
 
   const handleChange = (e) => {
@@ -42,7 +55,7 @@ const Canchas = () => {
       }
       setIsModalOpen(false);
       fetchCanchas();
-      setCurrentCancha({ nombre: '', descripcion: '', precioHora: '', capacidad: '', ubicacion: '', disponible: true });
+      setCurrentCancha({ nombre: '', numeroCancha: '', descripcion: '', precioHora: '', duracion: 1, capacidad: '', ubicacion: '', disponible: true, ownerId: '' });
     } catch (error) {
       console.error(error);
       alert('Error al guardar la cancha');
@@ -67,7 +80,23 @@ const Canchas = () => {
   };
 
   const openAddModal = () => {
-    setCurrentCancha({ nombre: '', descripcion: '', precioHora: '', capacidad: '', ubicacion: '', disponible: true });
+    let defaultNombre = '';
+    let defaultUbicacion = '';
+    if (canchas && canchas.length > 0) {
+      defaultNombre = canchas[0].nombre;
+      defaultUbicacion = canchas[0].ubicacion;
+    }
+      setCurrentCancha({ 
+      nombre: defaultNombre, 
+      numeroCancha: '', 
+      descripcion: '', 
+      precioHora: '',
+      duracion: 1, 
+      capacidad: '', 
+      ubicacion: defaultUbicacion, 
+      disponible: true, 
+      ownerId: '' 
+    });
     setIsModalOpen(true);
   };
 
@@ -85,9 +114,11 @@ const Canchas = () => {
           <table>
             <thead>
               <tr>
-                <th>Nombre</th>
+                <th>Lugar/Sede</th>
+                <th>Número</th>
                 <th>Ubicación</th>
                 <th>Precio / Hora</th>
+                <th>Duración (h)</th>
                 <th>Capacidad</th>
                 <th>Estado</th>
                 <th>Acciones</th>
@@ -97,8 +128,10 @@ const Canchas = () => {
               {canchas.map(cancha => (
                 <tr key={cancha.id}>
                   <td style={{ fontWeight: '600' }}>{cancha.nombre}</td>
+                  <td>{cancha.numeroCancha || '-'}</td>
                   <td>{cancha.ubicacion}</td>
                   <td>${cancha.precioHora}</td>
+                  <td>{cancha.duracion || 1} h</td>
                   <td>{cancha.capacidad}</td>
                   <td>
                     <span style={{ 
@@ -139,9 +172,15 @@ const Canchas = () => {
           <div className="modal-content">
             <h2 style={{ color: 'var(--primary-color)' }}>{currentCancha.id ? 'Editar Cancha' : 'Nueva Cancha'}</h2>
             <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label className="form-label">Nombre</label>
-                <input type="text" className="form-control" name="nombre" value={currentCancha.nombre} onChange={handleChange} required />
+              <div style={{ display: 'flex', gap: '1rem' }}>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label className="form-label">Lugar/Sede (Nombre)</label>
+                  <input type="text" className="form-control" name="nombre" value={currentCancha.nombre} onChange={handleChange} required />
+                </div>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label className="form-label">Número o Nombre de Cancha</label>
+                  <input type="text" className="form-control" name="numeroCancha" value={currentCancha.numeroCancha} onChange={handleChange} placeholder="Ej: Cancha 1, 6v6 A..." />
+                </div>
               </div>
               <div className="form-group">
                 <label className="form-label">Descripción</label>
@@ -149,8 +188,12 @@ const Canchas = () => {
               </div>
               <div style={{ display: 'flex', gap: '1rem' }}>
                 <div className="form-group" style={{ flex: 1 }}>
-                  <label className="form-label">Precio ($/Hora)</label>
+                  <label className="form-label">Precio ($)</label>
                   <input type="number" className="form-control" name="precioHora" value={currentCancha.precioHora} onChange={handleChange} required />
+                </div>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label className="form-label">Duración (Horas)</label>
+                  <input type="number" className="form-control" name="duracion" value={currentCancha.duracion} onChange={handleChange} required min="1" max="10" />
                 </div>
                 <div className="form-group" style={{ flex: 1 }}>
                   <label className="form-label">Capacidad</label>
@@ -161,7 +204,18 @@ const Canchas = () => {
                 <label className="form-label">Ubicación</label>
                 <input type="text" className="form-control" name="ubicacion" value={currentCancha.ubicacion} onChange={handleChange} required />
               </div>
-              <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              {user?.role !== 'OWNER' && (
+                <div className="form-group">
+                  <label className="form-label">Dueño de la Cancha</label>
+                  <select className="form-control" name="ownerId" value={currentCancha.ownerId || ''} onChange={handleChange}>
+                    <option value="">-- Seleccionar Dueño --</option>
+                    {owners.map(owner => (
+                      <option key={owner.id} value={owner.id}>{owner.nombre} ({owner.email})</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+              <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1rem' }}>
                 <input type="checkbox" name="disponible" checked={currentCancha.disponible} onChange={handleChange} />
                 <label style={{ color: 'var(--text-muted)' }}>Disponible para reserva</label>
               </div>

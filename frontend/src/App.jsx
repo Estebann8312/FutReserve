@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Canchas from './pages/Canchas';
+import Reservar from './pages/Reservar';
 
 function App() {
   return (
@@ -23,6 +24,12 @@ function App() {
           <Route path="/canchas" element={
             <PrivateRoute>
               <Canchas />
+            </PrivateRoute>
+          } />
+
+          <Route path="/reservar" element={
+            <PrivateRoute>
+              <Reservar />
             </PrivateRoute>
           } />
         </Routes>

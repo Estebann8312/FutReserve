@@ -18,6 +18,10 @@ public class CanchaService {
         return canchaRepository.findAll();
     }
 
+    public List<Cancha> getByOwnerId(String ownerId) {
+        return canchaRepository.findByOwnerId(ownerId);
+    }
+
     public Cancha getById(String id) {
         return canchaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cancha no encontrada con id: " + id));
@@ -26,24 +30,30 @@ public class CanchaService {
     public Cancha create(CanchaRequest request) {
         Cancha cancha = new Cancha();
         cancha.setNombre(request.getNombre());
+        cancha.setNumeroCancha(request.getNumeroCancha());
         cancha.setDescripcion(request.getDescripcion());
         cancha.setPrecioHora(request.getPrecioHora());
+        cancha.setDuracion(request.getDuracion() != null ? request.getDuracion() : 1);
         cancha.setCapacidad(request.getCapacidad());
         cancha.setUbicacion(request.getUbicacion());
         cancha.setDisponible(request.getDisponible() != null ? request.getDisponible() : true);
         cancha.setImagenUrl(request.getImagenUrl());
+        cancha.setOwnerId(request.getOwnerId());
         return canchaRepository.save(cancha);
     }
 
     public Cancha update(String id, CanchaRequest request) {
         Cancha cancha = getById(id);
         cancha.setNombre(request.getNombre());
+        cancha.setNumeroCancha(request.getNumeroCancha());
         cancha.setDescripcion(request.getDescripcion());
         cancha.setPrecioHora(request.getPrecioHora());
+        cancha.setDuracion(request.getDuracion() != null ? request.getDuracion() : 1);
         cancha.setCapacidad(request.getCapacidad());
         cancha.setUbicacion(request.getUbicacion());
         cancha.setDisponible(request.getDisponible() != null ? request.getDisponible() : cancha.getDisponible());
         cancha.setImagenUrl(request.getImagenUrl());
+        cancha.setOwnerId(request.getOwnerId());
         return canchaRepository.save(cancha);
     }
 

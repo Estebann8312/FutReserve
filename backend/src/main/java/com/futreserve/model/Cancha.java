@@ -18,12 +18,17 @@ public class Cancha {
     private String id;
 
     private String nombre;
+    private String numeroCancha;
     private String descripcion;
     private Double precioHora;
+    private Integer duracion = 1;
     private Integer capacidad;
     private String ubicacion;
     private Boolean disponible = true;
     private String imagenUrl;
+    
+    // Referencia al ID del usuario (Dueño) que administra esta cancha
+    private String ownerId;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 }

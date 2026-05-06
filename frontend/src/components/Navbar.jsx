@@ -13,7 +13,8 @@ const Navbar = () => {
         <Link to="/" className="nav-brand">⚽ FutReserve</Link>
         <div className="nav-links">
           <Link to="/">Dashboard</Link>
-          <Link to="/canchas">Canchas</Link>
+          <Link to="/reservar">Reservar</Link>
+          {user.role !== 'USER' && <Link to="/canchas">Gestión Canchas</Link>}
           <span style={{ marginLeft: '1.5rem', color: 'var(--text-muted)' }}>|</span>
           <span style={{ marginLeft: '1.5rem' }}>Hola, {user.nombre}</span>
           <button onClick={logout} className="btn btn-danger" style={{ marginLeft: '1.5rem', padding: '0.4rem 1rem' }}>

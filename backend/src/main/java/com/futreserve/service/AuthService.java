@@ -27,11 +27,17 @@ public class AuthService {
         usuario.setNombre(request.getNombre());
         usuario.setEmail(request.getEmail());
         usuario.setPassword(passwordEncoder.encode(request.getPassword()));
+        
+        if ("OWNER".equals(request.getRole())) {
+            usuario.setRole(com.futreserve.model.Role.OWNER);
+        } else {
+            usuario.setRole(com.futreserve.model.Role.USER);
+        }
 
         usuarioRepository.save(usuario);
 
         String token = jwtUtil.generateToken(usuario.getEmail());
-        return new AuthResponse(token, usuario.getNombre(), usuario.getEmail());
+        return new AuthResponse(token, usuario.getNombre(), usuario.getEmail(), usuario.getRole() != null ? usuario.getRole().name() : "USER", usuario.getId());
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -43,6 +49,6 @@ public class AuthService {
         }
 
         String token = jwtUtil.generateToken(usuario.getEmail());
-        return new AuthResponse(token, usuario.getNombre(), usuario.getEmail());
+        return new AuthResponse(token, usuario.getNombre(), usuario.getEmail(), usuario.getRole() != null ? usuario.getRole().name() : "USER", usuario.getId());
     }
 }

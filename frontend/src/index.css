@@ -185,3 +185,38 @@ tr:hover td {
 .nav-links a:hover {
   color: var(--primary-color);
 }
+
+/* Cancha cards */
+.cancha-card {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.cancha-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 255, 135, 0.12);
+  border-color: rgba(0, 255, 135, 0.35);
+}
+
+/* Modal animation */
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.96) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-content {
+  animation: modalFadeIn 0.2s ease;
+}
+
+/* Table row hover */
+tr:hover td {
+  background-color: rgba(0, 255, 135, 0.03);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-color); }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
