@@ -14,6 +14,14 @@
 
 ---
 
+## 👥 Integrantes del Equipo
+
+*   👨‍💻 **David Esteban Suarez Lozano**
+*   👨‍💻 **Thomas Alejandro Perez Rojas**
+*   👨‍💻 **Jesus David Santodomingo Carrascal**
+
+---
+  
 ## 🛠️ Tecnologías Principales
 
 Un stack moderno, potente y seguro:
@@ -53,8 +61,4 @@ graph TD
 
 ---
 
-## 👥 Integrantes del Equipo
 
-*   👨‍💻 **David Esteban Suarez Lozano**
-*   👨‍💻 **Thomas Alejandro Perez Rojas**
-*   👨‍💻 **Jesus David Santodomingo Carrascal**
