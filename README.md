@@ -53,6 +53,9 @@ Asegúrate de tener instalado Node.js (v18 o superior).
     ```
     El frontend estará disponible en `http://localhost:5173`.
 
+### 3. Evitar subir archivos temporales o compilados
+Asegúrense de no modificar ni borrar los archivos `.gitignore`. Estos previenen que se suban a GitHub archivos basura generados por sus computadoras o IDEs (como las carpetas `target/`, `node_modules/` o configuraciones de VS Code / IntelliJ).
+
 ## Funcionalidades Implementadas
 
 *   **Autenticación:** Registro e inicio de sesión de usuarios usando JWT.
@@ -80,25 +83,4 @@ graph TD
 
 ---
 
-## 🤝 Instrucciones para Colaboradores (Trabajo en Equipo)
 
-Para que tus compañeros puedan trabajar en este proyecto sin problemas con la base de datos, deben seguir estas instrucciones:
-
-### 1. Clonar el Repositorio
-```bash
-git clone https://github.com/Estebann8312/FutReserve.git
-cd FutReserve
-```
-
-### 2. Conexión a MongoDB Compartida (Opción Recomendada)
-El proyecto ya está configurado para conectarse al cluster principal en `backend/src/main/resources/application.properties`. 
-
-Para que tus compañeros puedan conectarse exitosamente a este mismo cluster en la nube, el dueño de la base de datos (Esteban) debe asegurarse de que el cluster permita conexiones desde cualquier IP:
-1. Ir a [MongoDB Atlas](https://www.mongodb.com/atlas)
-2. Seleccionar **Network Access** en el menú izquierdo.
-3. Asegurarse de que exista una regla con la IP `0.0.0.0/0` (Allow Access From Anywhere).
-
-De esta manera, cualquier compañero que descargue el código podrá hacer `mvn spring-boot:run` y conectarse automáticamente a la base de datos compartida, viendo las mismas canchas y usuarios sin tener que configurar nada extra.
-
-### 3. Evitar subir archivos temporales o compilados
-Asegúrense de no modificar ni borrar los archivos `.gitignore`. Estos previenen que se suban a GitHub archivos basura generados por sus computadoras o IDEs (como las carpetas `target/`, `node_modules/` o configuraciones de VS Code / IntelliJ).
